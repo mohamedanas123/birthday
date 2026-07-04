@@ -169,9 +169,23 @@
   </div>
 
   <!-- ================================================
-       PAGE 4 — FINAL LOVE MESSAGE
+       PAGE 4 — WHY I LOVE YOU (FLIP CARDS)
        ================================================ -->
   <div class="page hidden" id="page4">
+    <div class="love-cards-scene">
+      <h2 class="love-cards-title">Why I Love You 💕</h2>
+      <p class="love-cards-sub">Touch each card to reveal ✨</p>
+      <div class="love-cards-grid" id="loveCardsGrid"></div>
+      <button class="next-btn love-next-btn" onclick="goToPage(5)">
+        ⭐ One Last Thing...
+      </button>
+    </div>
+  </div>
+
+  <!-- ================================================
+       PAGE 5 — FINAL LOVE MESSAGE
+       ================================================ -->
+  <div class="page hidden" id="page5">
     <div class="final-scene" id="finalScene">
       <div class="final-stars" id="finalStars"></div>
       <h2 class="final-title">Happy Birthday,<br><span class="final-name-glow">Tomato 🍅</span></h2>
@@ -196,7 +210,8 @@
     <span class="dot active" id="dot1" onclick="goToPage(1)" title="Surprise"></span>
     <span class="dot" id="dot2" onclick="goToPage(2)" title="Cake"></span>
     <span class="dot" id="dot3" onclick="goToPage(3)" title="Photos"></span>
-    <span class="dot" id="dot4" onclick="goToPage(4)" title="Message"></span>
+    <span class="dot" id="dot4" onclick="goToPage(4)" title="Love Cards"></span>
+    <span class="dot" id="dot5" onclick="goToPage(5)" title="Message"></span>
   </div>
 
   <script src="script.js"></script>

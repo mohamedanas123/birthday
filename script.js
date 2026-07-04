@@ -285,6 +285,7 @@ function goToPage(num) {
     if (num === 2) initPage2();
     if (num === 3) initPage3();
     if (num === 4) initPage4();
+    if (num === 5) initPage5();
   }, 700);
 }
 
@@ -633,9 +634,64 @@ function initPage3() {
 }
 
 /* ====================================================================
-   PAGE 4 — FINAL MESSAGE
+   PAGE 4 — WHY I LOVE YOU (10 TOUCH CARDS)
    ==================================================================== */
+const TOUCH_CARDS_DATA = [
+  { icon: '🌸', text: '' },
+  { icon: '💖', text: '' },
+  { icon: '🍅', text: '' },
+  { icon: '🤝', text: '' },
+  { icon: '🤗', text: '' },
+  { icon: '✨', text: '' },
+  { icon: '💕', text: '' },
+  { icon: '🫂', text: '' },
+  { icon: '🧸', text: '' },
+  { icon: '⭐', text: '' }
+];
+
+let loveCardsInitialized = false;
+
 function initPage4() {
+  if (loveCardsInitialized) return;
+  loveCardsInitialized = true;
+
+  const grid = document.getElementById('loveCardsGrid');
+  grid.innerHTML = '';
+
+  TOUCH_CARDS_DATA.forEach((data, index) => {
+    const card = document.createElement('div');
+    card.className = 'lcard';
+    card.innerHTML = `
+      <div class="lcard-inner">
+        <div class="lcard-front">
+          <span class="lcard-num">${index + 1}</span>
+          <span class="lcard-heart">💕</span>
+          <span class="lcard-hint">Touch me</span>
+        </div>
+        <div class="lcard-back">
+          <span class="lcard-back-icon">${data.icon}</span>
+          <span class="lcard-back-text">${data.text || '...'}</span>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      card.classList.toggle('flipped');
+      if (card.classList.contains('flipped')) {
+        const rect = card.getBoundingClientRect();
+        // Trigger a light firework burst effect at the center of the flipped card
+        burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      }
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+/* ====================================================================
+   PAGE 5 — FINAL MESSAGE
+   ==================================================================== */
+function initPage5() {
   const starsEl = document.getElementById('finalStars');
   if (starsEl && !starsEl.dataset.built) {
     starsEl.dataset.built = '1';

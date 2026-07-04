@@ -1068,3 +1068,172 @@ html, body {
 
 /* ── Shared utility ── */
 .hidden { display: none !important; }
+
+/* ============================================================
+   PAGE 4 — LOVE FLIP CARDS
+   ============================================================ */
+#page4 {
+  background: radial-gradient(ellipse at 50% 30%,
+    #FFF0F5 0%, #FFE4EF 40%, #FFF8F0 100%);
+  overflow-y: auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.love-cards-scene {
+  width: 100%;
+  padding: 2rem 1.2rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-height: 100vh;
+}
+
+.love-cards-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--ink-mid);
+  text-align: center;
+}
+
+.love-cards-sub {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  animation: hintPulse 2s ease-in-out infinite;
+  margin-bottom: 0.5rem;
+}
+
+/* Grid: 2 columns on mobile, 5 across bigger screens */
+.love-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+@media (min-width: 540px) {
+  .love-cards-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ── Single flip card ── */
+.lcard {
+  aspect-ratio: 3/4;
+  perspective: 700px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lcard-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.34, 1.3, 0.64, 1);
+  border-radius: 16px;
+}
+
+.lcard.flipped .lcard-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front face */
+.lcard-front {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 24px rgba(200,72,106,0.2);
+  overflow: hidden;
+  background: var(--lc-bg, linear-gradient(135deg, #FFB3C6, #FF85A1));
+}
+
+.lcard-front::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.lcard-num {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 2px 8px rgba(180,60,90,0.3);
+  line-height: 1;
+}
+
+.lcard-heart {
+  font-size: 1.4rem;
+  animation: heartBeat 1.2s ease-in-out infinite;
+}
+@keyframes heartBeat {
+  0%,100% { transform: scale(1); }
+  14%     { transform: scale(1.25); }
+  28%     { transform: scale(1); }
+  42%     { transform: scale(1.18); }
+}
+
+.lcard-hint {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Back face */
+.lcard-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.92);
+  border: 2px solid rgba(255,179,200,0.5);
+  box-shadow: 0 6px 24px rgba(200,72,106,0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 0.6rem;
+  gap: 0.4rem;
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+
+.lcard-back-icon {
+  font-size: 1.4rem;
+}
+
+.lcard-back-text {
+  font-size: clamp(0.65rem, 2vw, 0.82rem);
+  font-weight: 700;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+
+/* Per-card color variants (cycling) */
+.lcard:nth-child(1)  .lcard-front { background: linear-gradient(135deg, #FFB3C6, #FF85A1); }
+.lcard:nth-child(2)  .lcard-front { background: linear-gradient(135deg, #F2B880, #E8916A); }
+.lcard:nth-child(3)  .lcard-front { background: linear-gradient(135deg, #C8A0E0, #A070C8); }
+.lcard:nth-child(4)  .lcard-front { background: linear-gradient(135deg, #80C8E0, #50A8D8); }
+.lcard:nth-child(5)  .lcard-front { background: linear-gradient(135deg, #F5C842, #E8A020); }
+.lcard:nth-child(6)  .lcard-front { background: linear-gradient(135deg, #FF85A1, #C8486A); }
+.lcard:nth-child(7)  .lcard-front { background: linear-gradient(135deg, #A8D880, #70C848); }
+.lcard:nth-child(8)  .lcard-front { background: linear-gradient(135deg, #E880C8, #C050A0); }
+.lcard:nth-child(9)  .lcard-front { background: linear-gradient(135deg, #80D8C8, #40B8A8); }
+.lcard:nth-child(10) .lcard-front { background: linear-gradient(135deg, #FFB3C6, #F5C842); }
+
+/* Hover lift when not flipped */
+.lcard:not(.flipped):hover .lcard-inner {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 12px 32px rgba(200,72,106,0.25);
+}
+
+.love-next-btn { margin-top: 1rem; }
