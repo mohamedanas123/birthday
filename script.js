@@ -5,15 +5,15 @@
    ============================================================ */
 
 /* ── Canvas Setup ── */
-const sakuraCanvas  = document.getElementById('sakuraCanvas');
-const sCtx          = sakuraCanvas.getContext('2d');
-const fxCanvas      = document.getElementById('fxCanvas');
-const fCtx          = fxCanvas.getContext('2d');
-const cursorCanvas  = document.getElementById('cursorCanvas');
-const cCtx          = cursorCanvas.getContext('2d');
+const sakuraCanvas = document.getElementById('sakuraCanvas');
+const sCtx = sakuraCanvas.getContext('2d');
+const fxCanvas = document.getElementById('fxCanvas');
+const fCtx = fxCanvas.getContext('2d');
+const cursorCanvas = document.getElementById('cursorCanvas');
+const cCtx = cursorCanvas.getContext('2d');
 
 function resize() {
-  sakuraCanvas.width  = fxCanvas.width  = cursorCanvas.width  = window.innerWidth;
+  sakuraCanvas.width = fxCanvas.width = cursorCanvas.width = window.innerWidth;
   sakuraCanvas.height = fxCanvas.height = cursorCanvas.height = window.innerHeight;
 }
 resize();
@@ -22,36 +22,36 @@ window.addEventListener('resize', resize);
 /* ====================================================================
    HEART CURSOR TRAIL
    ==================================================================== */
-const HEART_EMOJIS  = ['💕','💖','🌸','✨','💗','💞','🍅','⭐'];
+const HEART_EMOJIS = ['💕', '💖', '🌸', '✨', '💗', '💞', '🍅', '⭐'];
 let cursorParticles = [];
 let lastCursorX = -999, lastCursorY = -999;
 
 class CursorParticle {
   constructor(x, y) {
-    this.x     = x + (Math.random() - 0.5) * 20;
-    this.y     = y + (Math.random() - 0.5) * 20;
+    this.x = x + (Math.random() - 0.5) * 20;
+    this.y = y + (Math.random() - 0.5) * 20;
     this.emoji = HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)];
-    this.size  = 14 + Math.random() * 16;
+    this.size = 14 + Math.random() * 16;
     this.alpha = 1;
-    this.vy    = -0.8 - Math.random() * 1.2;
-    this.vx    = (Math.random() - 0.5) * 1.5;
+    this.vy = -0.8 - Math.random() * 1.2;
+    this.vx = (Math.random() - 0.5) * 1.5;
     this.decay = 0.022 + Math.random() * 0.015;
-    this.rot   = (Math.random() - 0.5) * 0.15;
+    this.rot = (Math.random() - 0.5) * 0.15;
     this.angle = 0;
   }
   update() {
-    this.x     += this.vx;
-    this.y     += this.vy;
-    this.vy    += 0.04;          // gentle gravity
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += 0.04;          // gentle gravity
     this.angle += this.rot;
     this.alpha -= this.decay;
   }
   draw() {
     cCtx.save();
     cCtx.globalAlpha = Math.max(0, this.alpha);
-    cCtx.font        = `${this.size}px serif`;
-    cCtx.textAlign   = 'center';
-    cCtx.textBaseline= 'middle';
+    cCtx.font = `${this.size}px serif`;
+    cCtx.textAlign = 'center';
+    cCtx.textBaseline = 'middle';
     cCtx.translate(this.x, this.y);
     cCtx.rotate(this.angle);
     cCtx.fillText(this.emoji, 0, 0);
@@ -73,18 +73,18 @@ class CursorParticle {
 (function initLoadScreen() {
   const petalEl = document.getElementById('loadPetals');
   const tagline = document.getElementById('loadTagline');
-  const PETALS  = ['🌸','🌸','🌸','💕','✨','🍅','🌸','⭐','🌸'];
+  const PETALS = ['🌸', '🌸', '🌸', '💕', '✨', '🍅', '🌸', '⭐', '🌸'];
 
   // Spawn floating petals on the load screen
   function spawnLoadPetal() {
     const el = document.createElement('span');
-    el.className  = 'load-petal';
+    el.className = 'load-petal';
     el.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
     el.style.left = Math.random() * 100 + 'vw';
     el.style.bottom = '-30px';
     const dur = 6 + Math.random() * 8;
-    el.style.animationDuration  = dur + 's';
-    el.style.animationDelay     = Math.random() * 2 + 's';
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = Math.random() * 2 + 's';
     el.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
     petalEl.appendChild(el);
     setTimeout(() => el.remove(), (dur + 3) * 1000);
@@ -106,7 +106,7 @@ class CursorParticle {
 
 function startExperience() {
   const screen = document.getElementById('loadScreen');
-  const btn    = document.getElementById('loadStartBtn');
+  const btn = document.getElementById('loadStartBtn');
   // Button press ripple feel
   btn.style.transform = 'scale(0.95)';
   btn.style.transition = 'transform 0.15s ease';
@@ -123,24 +123,24 @@ function startExperience() {
 /* ====================================================================
    SAKURA PETALS
    ==================================================================== */
-const PETAL_COLS = ['rgba(249,198,208,','rgba(232,131,154,','rgba(255,200,220,','rgba(242,184,128,'];
+const PETAL_COLS = ['rgba(249,198,208,', 'rgba(232,131,154,', 'rgba(255,200,220,', 'rgba(242,184,128,'];
 class Petal {
   constructor(initial) {
     this.reset(initial);
   }
   reset(initial = false) {
-    this.x    = Math.random() * sakuraCanvas.width;
-    this.y    = initial ? Math.random() * sakuraCanvas.height : -30;
-    this.r    = 4 + Math.random() * 7;
-    this.vx   = (Math.random() - 0.5) * 1.2;
-    this.vy   = 0.6 + Math.random() * 1.1;
-    this.rot  = Math.random() * Math.PI * 2;
+    this.x = Math.random() * sakuraCanvas.width;
+    this.y = initial ? Math.random() * sakuraCanvas.height : -30;
+    this.r = 4 + Math.random() * 7;
+    this.vx = (Math.random() - 0.5) * 1.2;
+    this.vy = 0.6 + Math.random() * 1.1;
+    this.rot = Math.random() * Math.PI * 2;
     this.rotV = (Math.random() - 0.5) * 0.04;
     this.sway = Math.random() * Math.PI * 2;
-    this.swS  = 0.018 + Math.random() * 0.02;
-    this.swA  = 0.4 + Math.random() * 0.9;
-    this.alp  = 0.45 + Math.random() * 0.5;
-    this.col  = PETAL_COLS[Math.floor(Math.random() * PETAL_COLS.length)];
+    this.swS = 0.018 + Math.random() * 0.02;
+    this.swA = 0.4 + Math.random() * 0.9;
+    this.alp = 0.45 + Math.random() * 0.5;
+    this.col = PETAL_COLS[Math.floor(Math.random() * PETAL_COLS.length)];
   }
   update() {
     this.sway += this.swS;
@@ -252,7 +252,7 @@ function grandFinale() {
   delays.forEach(d => {
     setTimeout(() => burst(
       W * (0.15 + Math.random() * 0.7),
-      H * (0.1  + Math.random() * 0.55)
+      H * (0.1 + Math.random() * 0.55)
     ), d);
   });
 }
@@ -293,7 +293,7 @@ function goToPage(num) {
 (function initPage1() {
   // Burst stars around the name
   const burstEl = document.getElementById('burstStars');
-  const emojis = ['🌸','✨','🎉','💕','⭐','🎀','🌟','🎈','🍅','💫'];
+  const emojis = ['🌸', '✨', '🎉', '💕', '⭐', '🎀', '🌟', '🎈', '🍅', '💫'];
   const count = 16;
   for (let i = 0; i < count; i++) {
     const el = document.createElement('span');
@@ -312,7 +312,7 @@ function goToPage(num) {
 
   // Type name letter by letter
   const nameEl = document.getElementById('wishName');
-  const line1  = document.getElementById('wishLine1');
+  const line1 = document.getElementById('wishLine1');
   line1.textContent = '✨  Happy Birthday  ✨';
 
   const NAME = 'Tomato! 🍅';
@@ -334,34 +334,34 @@ function goToPage(num) {
    PAGE 2 — DRAG KNIFE CAKE CUTTING
    ==================================================================== */
 function initPage2() {
-  const stage       = document.getElementById('cakeStage');
-  const knifeDrag   = document.getElementById('knifeDrag');
-  const knifeGlow   = knifeDrag.querySelector('.knife-glow');
-  const cutCanvas   = document.getElementById('cutCanvas');
-  const cutCtx      = cutCanvas.getContext('2d');
-  const cakeWhole   = document.getElementById('cakeWhole');
+  const stage = document.getElementById('cakeStage');
+  const knifeDrag = document.getElementById('knifeDrag');
+  const knifeGlow = knifeDrag.querySelector('.knife-glow');
+  const cutCanvas = document.getElementById('cutCanvas');
+  const cutCtx = cutCanvas.getContext('2d');
+  const cakeWhole = document.getElementById('cakeWhole');
   const cakeCutWrap = document.getElementById('cakeCutWrap');
   const creamSplats = document.getElementById('creamSplats');
-  const cutMessage  = document.getElementById('cutMessage');
+  const cutMessage = document.getElementById('cutMessage');
   const progressBar = document.getElementById('cutProgressBar');
-  const hintEl      = document.getElementById('cakeSubHint');
+  const hintEl = document.getElementById('cakeSubHint');
 
   let isDragging = false;
-  let cutDone    = false;
+  let cutDone = false;
 
   // Size canvas to stage
   function sizeCanvas() {
-    cutCanvas.width  = stage.offsetWidth  || 280;
+    cutCanvas.width = stage.offsetWidth || 280;
     cutCanvas.height = stage.offsetHeight || 340;
   }
   sizeCanvas();
 
   // Where the cake body starts/ends (relative to stage top)
   // Candles top ~18px, cake body starts around 80px from top
-  const CAKE_TOP    = 80;   // px from stage top where cake begins
+  const CAKE_TOP = 80;   // px from stage top where cake begins
   const CAKE_BOTTOM = 310;  // px from stage top where plate ends
-  const CAKE_TOTAL  = CAKE_BOTTOM - CAKE_TOP;
-  const CUT_X       = (cutCanvas.width / 2);
+  const CAKE_TOTAL = CAKE_BOTTOM - CAKE_TOP;
+  const CUT_X = (cutCanvas.width / 2);
 
   // Draw the cut line on canvas as knife moves
   function drawCutLine(progress) {
@@ -376,8 +376,8 @@ function initPage2() {
     cutCtx.moveTo(CUT_X, CAKE_TOP);
     cutCtx.lineTo(CUT_X, lineEnd);
     cutCtx.strokeStyle = 'rgba(255,200,200,0.35)';
-    cutCtx.lineWidth   = 10;
-    cutCtx.lineCap     = 'round';
+    cutCtx.lineWidth = 10;
+    cutCtx.lineCap = 'round';
     cutCtx.stroke();
 
     // Sharp inner line
@@ -385,8 +385,8 @@ function initPage2() {
     cutCtx.moveTo(CUT_X, CAKE_TOP);
     cutCtx.lineTo(CUT_X, lineEnd);
     cutCtx.strokeStyle = 'rgba(255, 80, 120, 0.9)';
-    cutCtx.lineWidth   = 2.5;
-    cutCtx.lineCap     = 'round';
+    cutCtx.lineWidth = 2.5;
+    cutCtx.lineCap = 'round';
 
     // Dashed cut effect
     cutCtx.setLineDash([6, 3]);
@@ -399,9 +399,9 @@ function initPage2() {
     cutCtx.arc(CUT_X, lineEnd, 5, 0, Math.PI * 2);
     cutCtx.fillStyle = 'rgba(255,100,150,0.9)';
     cutCtx.shadowColor = '#FF6B9D';
-    cutCtx.shadowBlur  = 12;
+    cutCtx.shadowBlur = 12;
     cutCtx.fill();
-    cutCtx.shadowBlur  = 0;
+    cutCtx.shadowBlur = 0;
   }
 
   // Knife drag: get Y relative to stage
@@ -427,7 +427,7 @@ function initPage2() {
     const clampedY = Math.max(0, Math.min(y, CAKE_BOTTOM + 10));
 
     // Move knife element
-    knifeDrag.style.top  = (clampedY - 30) + 'px';    // offset for knife size
+    knifeDrag.style.top = (clampedY - 30) + 'px';    // offset for knife size
     knifeDrag.style.left = '50%';
 
     // Progress: how far through the cake (0 → 1)
@@ -462,7 +462,7 @@ function initPage2() {
       if (progress < 1) {
         // Not far enough — bounce back
         knifeDrag.style.transition = 'top 0.5s var(--spring), left 0.3s ease';
-        knifeDrag.style.top  = '0px';
+        knifeDrag.style.top = '0px';
         knifeDrag.style.left = '50%';
         knifeGlow.style.height = '0px';
         setTimeout(() => { knifeDrag.style.transition = ''; }, 600);
@@ -487,8 +487,8 @@ function initPage2() {
   function completeCut() {
     if (cutTriggered) return;
     cutTriggered = true;
-    cutDone      = true;
-    isDragging   = false;
+    cutDone = true;
+    isDragging = false;
     knifeDrag.classList.remove('dragging');
 
     blowCandles();
@@ -532,12 +532,12 @@ function initPage2() {
   }
 
   // Attach events
-  knifeDrag.addEventListener('mousedown',  onDragStart);
+  knifeDrag.addEventListener('mousedown', onDragStart);
   knifeDrag.addEventListener('touchstart', onDragStart, { passive: false });
-  document.addEventListener('mousemove',  onDragMove);
-  document.addEventListener('touchmove',  onDragMove,  { passive: false });
-  document.addEventListener('mouseup',    onDragEnd);
-  document.addEventListener('touchend',   onDragEnd);
+  document.addEventListener('mousemove', onDragMove);
+  document.addEventListener('touchmove', onDragMove, { passive: false });
+  document.addEventListener('mouseup', onDragEnd);
+  document.addEventListener('touchend', onDragEnd);
 }
 
 
@@ -640,7 +640,7 @@ const TOUCH_CARDS_DATA = [
   { icon: '💕', text: 'You are cute when you are angry 🤗🥰' },
   { icon: '🫂', text: 'Every time I saw you, you make me happy yk' },
   { icon: '🧸', text: 'You are beautiful. Of course you are sexy too' },
-  { icon: '⭐', text: 'I like everything about you baby' }
+  { icon: '⭐', text: 'WISH U MANY MORE HAPPY RETURNS OF THE DAY BABY! ❤️ I hope u like it, I wish we could celebrate your birthday together. Always be happy! By ur baby' }
 ];
 
 let loveCardsInitialized = false;
@@ -681,7 +681,7 @@ function initPage4() {
       if (card.classList.contains('flipped')) {
         // We are closing the card. Let's flip it back.
         card.classList.remove('flipped');
-        
+
         // When we close this card, all subsequent cards must be locked and flipped back (if they were open)
         for (let k = index + 1; k < TOUCH_CARDS_DATA.length; k++) {
           const nextCard = grid.children[k];
@@ -693,7 +693,7 @@ function initPage4() {
       } else {
         // We are opening/flipping this card!
         card.classList.add('flipped');
-        
+
         // Unlock the very next card
         const nextCard = grid.children[index + 1];
         if (nextCard) {
