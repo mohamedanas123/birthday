@@ -113,8 +113,6 @@ function startExperience() {
   setTimeout(() => {
     btn.style.transform = '';
     screen.classList.add('exit');
-    // Launch a burst to celebrate the start
-    burst(window.innerWidth / 2, window.innerHeight / 2);
     setTimeout(() => {
       screen.style.display = 'none';
     }, 1100);
@@ -327,10 +325,6 @@ function goToPage(num) {
       nameEl.textContent += chars[i++];
       if (i >= chars.length) {
         clearInterval(iv);
-        // Burst fireworks on name complete
-        setTimeout(() => {
-          burst(window.innerWidth / 2, window.innerHeight * 0.35);
-        }, 200);
       }
     }, 130);
   }, 2200);
@@ -677,11 +671,6 @@ function initPage4() {
 
     card.addEventListener('click', () => {
       card.classList.toggle('flipped');
-      if (card.classList.contains('flipped')) {
-        const rect = card.getBoundingClientRect();
-        // Trigger a light firework burst effect at the center of the flipped card
-        burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
-      }
     });
 
     grid.appendChild(card);
