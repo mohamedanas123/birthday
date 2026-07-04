@@ -735,25 +735,38 @@ body {
   position: absolute;
   bottom: 0;
   width: 220px;
-  filter: drop-shadow(0 16px 32px rgba(200, 100, 120, 0.35));
+  filter: drop-shadow(0 16px 36px rgba(200, 100, 120, 0.4));
   z-index: 2;
   transition: filter 0.4s ease;
 }
 
 .c-top {
-  height: 52px;
+  height: 54px;
   background: linear-gradient(135deg, #FFB3C6, #FF85A1);
   margin: 0 18px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 12px 12px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-size: 0.72rem;
+  font-weight: 900;
   color: #fff;
-  text-shadow: 0 1px 4px rgba(180, 60, 90, 0.4);
+  text-shadow: 0 1.5px 4px rgba(180, 60, 90, 0.55);
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* to allow strawberries to pop up */
+}
+
+/* Strawberries on top */
+.c-top::after {
+  content: '🍓 🍓 🍓 🍓 🍓';
+  position: absolute;
+  top: -16px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 1.3rem;
+  letter-spacing: 8px;
+  filter: drop-shadow(0 3px 6px rgba(150, 20, 40, 0.25));
+  z-index: 4;
 }
 
 .c-top::before {
@@ -762,32 +775,83 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 12px;
-  background: repeating-linear-gradient(90deg, #fff 0, #fff 8px, #FFD6E0 8px, #FFD6E0 16px);
-  border-radius: 10px 10px 0 0;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, #fff 0, #fff 10px, #FFD6E0 10px, #FFD6E0 20px);
+  border-radius: 12px 12px 0 0;
+  z-index: 3;
 }
 
 .c-mid {
-  height: 68px;
+  height: 70px;
   background: linear-gradient(135deg, #FFDDE4, #FFB3C6);
   margin: 0 6px;
   border-top: 4px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
+/* Cream drips on mid layer */
+.c-mid::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 0; right: 0;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 0 0 10px 10px;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.05);
+  z-index: 3;
+}
+.c-mid::after {
+  content: '';
+  position: absolute;
+  top: 12px; left: 8px;
+  width: 6px; height: 14px;
+  background: #ffffff;
+  border-radius: 3px;
+  box-shadow: 0 4px 0 #ffffff, 28px 2px 0 #ffffff, 56px -4px 0 #ffffff, 84px 6px 0 #ffffff, 112px 0px 0 #ffffff, 140px 8px 0 #ffffff, 168px 1px 0 #ffffff, 196px 5px 0 #ffffff;
+  z-index: 3;
 }
 
 .c-bot {
-  height: 80px;
+  height: 82px;
   background: linear-gradient(135deg, #FFE8EE, #FFDDE4);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 14px 14px;
   border-top: 4px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
+/* Drips on bot layer */
+.c-bot::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 0; right: 0;
+  height: 15px;
+  background: #FFDDE4;
+  border-radius: 0 0 10px 10px;
+  z-index: 3;
+}
+.c-bot::after {
+  content: '';
+  position: absolute;
+  top: 11px; left: 16px;
+  width: 6px; height: 12px;
+  background: #FFDDE4;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 #FFDDE4, 38px 6px 0 #FFDDE4, 76px 2px 0 #FFDDE4, 114px 5px 0 #FFDDE4, 152px 3px 0 #FFDDE4;
+  z-index: 3;
 }
 
 .cake-plate {
-  width: 110%;
-  margin-left: -5%;
-  height: 14px;
-  background: linear-gradient(180deg, #E8D0B0, #C8A880);
+  width: 114%;
+  margin-left: -7%;
+  height: 16px;
+  background: linear-gradient(180deg, rgba(255,180,200,0.85), rgba(220,130,160,0.95));
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
-  margin-top: -4px;
+  margin-top: -6px;
+  box-shadow: 0 8px 24px rgba(220, 100, 130, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(5px);
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Draggable Knife ── */
@@ -811,27 +875,27 @@ body {
 
 .knife-drag.dragging {
   cursor: grabbing;
-  filter: drop-shadow(0 0 12px rgba(255, 107, 157, 0.8));
+  filter: drop-shadow(0 0 16px rgba(255, 107, 157, 0.95));
 }
 
 .knife-emoji {
-  font-size: 3.2rem;
+  font-size: 3.5rem;
   transform: rotate(180deg);
   /* blade pointing down */
   transition: transform 0.3s var(--spring);
   pointer-events: none;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.3));
 }
 
 .knife-drag.dragging .knife-emoji {
-  transform: rotate(180deg) scale(1.15);
+  transform: rotate(180deg) scale(1.18) translateY(-4px);
 }
 
 .knife-glow {
-  width: 4px;
+  width: 6px;
   height: 0px;
-  background: linear-gradient(to bottom, rgba(255, 200, 200, 0.9), transparent);
-  border-radius: 2px;
+  background: linear-gradient(to bottom, rgba(255, 100, 150, 0.95), transparent);
+  border-radius: 3px;
   transition: height 0.1s linear;
   pointer-events: none;
 }
@@ -885,22 +949,55 @@ body {
 .c-top-h {
   height: 48px;
   background: linear-gradient(135deg, #FFB3C6, #FF85A1);
-  border-radius: 8px 8px 0 0;
+  border-radius: 10px 10px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.85rem;
+  position: relative;
+  overflow: visible;
+}
+.c-top-h::after {
+  content: '🍓🍓';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.25rem;
+  letter-spacing: 4px;
+  filter: drop-shadow(0 2px 4px rgba(150,20,40,0.2));
+  z-index: 4;
 }
 
 .c-mid-h {
-  height: 64px;
+  height: 66px;
   background: linear-gradient(135deg, #FFDDE4, #FFB3C6);
+  position: relative;
+}
+.c-mid-h::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 0; right: 0;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 0 0 8px 8px;
+  z-index: 3;
 }
 
 .c-bot-h {
-  height: 76px;
+  height: 78px;
   background: linear-gradient(135deg, #FFE8EE, #FFDDE4);
+  border-radius: 0 0 10px 10px;
+  position: relative;
+}
+.c-bot-h::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 0; right: 0;
+  height: 14px;
+  background: #FFDDE4;
   border-radius: 0 0 8px 8px;
+  z-index: 3;
 }
 
 /* Cream cross-section exposed after cut */
@@ -908,17 +1005,28 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  width: 6px;
+  width: 8px;
   height: 100%;
+  /* multi-layered chocolate, cream, and cherry filling cross section look */
   background: linear-gradient(to bottom,
-      #fff 0%, #FFE0E8 25%, #fff 50%, #FFDDE4 75%, #fff 100%);
+      #fff 0%, #fff 8%,
+      #8b5a2b 8%, #8b5a2b 16%, /* chocolate sponge */
+      #FFE0E8 16%, #FFE0E8 28%, /* cream */
+      #c41e3a 28%, #c41e3a 38%, /* cherry jam layer */
+      #8b5a2b 38%, #8b5a2b 54%, /* chocolate sponge */
+      #FFE0E8 54%, #FFE0E8 68%, /* cream */
+      #FFB3C6 68%, #FFB3C6 80%, /* strawberry filling */
+      #8b5a2b 80%, #8b5a2b 92%, /* chocolate sponge */
+      #fff 92%, #fff 100%);
   border-radius: 0 4px 4px 0;
+  box-shadow: inset -1px 0 3px rgba(0,0,0,0.1);
 }
 
 .left-half .cream-expose {
   right: auto;
   left: 0;
   border-radius: 4px 0 0 4px;
+  box-shadow: inset 1px 0 3px rgba(0,0,0,0.1);
 }
 
 /* ── Cream Splats ── */

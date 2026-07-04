@@ -283,7 +283,6 @@ function goToPage(num) {
     if (num === 2) initPage2();
     if (num === 3) initPage3();
     if (num === 4) initPage4();
-    if (num === 5) initPage5();
   }, 700);
 }
 
@@ -363,46 +362,101 @@ function initPage2() {
   const CAKE_TOTAL = CAKE_BOTTOM - CAKE_TOP;
   const CUT_X = (cutCanvas.width / 2);
 
-  // Draw the cut line on canvas as knife moves
-  function drawCutLine(progress) {
-    cutCtx.clearRect(0, 0, cutCanvas.width, cutCanvas.height);
-    if (progress <= 0) return;
+  // Spark particle system for cake cutting
+  let cutSparks = [];
+  let progressVal = 0;
+  let animId;
 
-    const lineEnd = CAKE_TOP + CAKE_TOTAL * progress;
-
-    // Glow outer line
-    cutCtx.save();
-    cutCtx.beginPath();
-    cutCtx.moveTo(CUT_X, CAKE_TOP);
-    cutCtx.lineTo(CUT_X, lineEnd);
-    cutCtx.strokeStyle = 'rgba(255,200,200,0.35)';
-    cutCtx.lineWidth = 10;
-    cutCtx.lineCap = 'round';
-    cutCtx.stroke();
-
-    // Sharp inner line
-    cutCtx.beginPath();
-    cutCtx.moveTo(CUT_X, CAKE_TOP);
-    cutCtx.lineTo(CUT_X, lineEnd);
-    cutCtx.strokeStyle = 'rgba(255, 80, 120, 0.9)';
-    cutCtx.lineWidth = 2.5;
-    cutCtx.lineCap = 'round';
-
-    // Dashed cut effect
-    cutCtx.setLineDash([6, 3]);
-    cutCtx.stroke();
-    cutCtx.setLineDash([]);
-    cutCtx.restore();
-
-    // Spark dot at knife tip
-    cutCtx.beginPath();
-    cutCtx.arc(CUT_X, lineEnd, 5, 0, Math.PI * 2);
-    cutCtx.fillStyle = 'rgba(255,100,150,0.9)';
-    cutCtx.shadowColor = '#FF6B9D';
-    cutCtx.shadowBlur = 12;
-    cutCtx.fill();
-    cutCtx.shadowBlur = 0;
+  class CutSpark {
+    constructor(x, y) {
+      this.x = x + (Math.random() - 0.5) * 16;
+      this.y = y + (Math.random() - 0.5) * 8;
+      this.vx = (Math.random() - 0.5) * 4;
+      this.vy = -1.5 - Math.random() * 2.5;
+      this.size = 2.5 + Math.random() * 3.5;
+      this.alpha = 1;
+      this.decay = 0.02 + Math.random() * 0.03;
+      this.color = Math.random() > 0.4 ? '#ffffff' : '#FF6B9D';
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += 0.12; // gravity
+      this.alpha -= this.decay;
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.alpha);
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   }
+
+  // Draw the cut line on canvas as knife moves
+  function renderCutCanvas() {
+    if (cutDone) {
+      cutCtx.clearRect(0, 0, cutCanvas.width, cutCanvas.height);
+      cancelAnimationFrame(animId);
+      return;
+    }
+
+    cutCtx.clearRect(0, 0, cutCanvas.width, cutCanvas.height);
+
+    if (progressVal > 0) {
+      const lineEnd = CAKE_TOP + CAKE_TOTAL * progressVal;
+
+      // Glow outer line
+      cutCtx.save();
+      cutCtx.beginPath();
+      cutCtx.moveTo(CUT_X, CAKE_TOP);
+      cutCtx.lineTo(CUT_X, lineEnd);
+      cutCtx.strokeStyle = 'rgba(255,180,210,0.45)';
+      cutCtx.lineWidth = 12;
+      cutCtx.lineCap = 'round';
+      cutCtx.stroke();
+
+      // Sharp inner line
+      cutCtx.beginPath();
+      cutCtx.moveTo(CUT_X, CAKE_TOP);
+      cutCtx.lineTo(CUT_X, lineEnd);
+      cutCtx.strokeStyle = 'rgba(255, 60, 110, 0.95)';
+      cutCtx.lineWidth = 2.5;
+      cutCtx.lineCap = 'round';
+      cutCtx.setLineDash([6, 4]);
+      cutCtx.stroke();
+      cutCtx.setLineDash([]);
+      cutCtx.restore();
+
+      // Spark dot at knife tip
+      cutCtx.beginPath();
+      cutCtx.arc(CUT_X, lineEnd, 6, 0, Math.PI * 2);
+      cutCtx.fillStyle = 'rgba(255,100,150,0.95)';
+      cutCtx.shadowColor = '#FF6B9D';
+      cutCtx.shadowBlur = 12;
+      cutCtx.fill();
+      cutCtx.shadowBlur = 0;
+
+      // Spawn spark particles while actively dragging
+      if (isDragging) {
+        for (let i = 0; i < 2; i++) {
+          cutSparks.push(new CutSpark(CUT_X, lineEnd));
+        }
+      }
+    }
+
+    // Draw and update sparks
+    cutSparks = cutSparks.filter(s => s.alpha > 0.02);
+    cutSparks.forEach(s => {
+      s.update();
+      s.draw(cutCtx);
+    });
+
+    animId = requestAnimationFrame(renderCutCanvas);
+  }
+  renderCutCanvas();
 
   // Knife drag: get Y relative to stage
   function getY(e) {
@@ -434,15 +488,15 @@ function initPage2() {
     const rawProgress = (clampedY - CAKE_TOP) / CAKE_TOTAL;
     const progress = Math.max(0, Math.min(1, rawProgress));
 
+    // Update progress value for loop
+    progressVal = progress;
+
     // Update progress bar
     progressBar.style.width = (progress * 100) + '%';
 
     // Update glow trail under knife
     const glowH = Math.max(0, clampedY - CAKE_TOP);
     knifeGlow.style.height = glowH + 'px';
-
-    // Draw cut line on canvas
-    drawCutLine(progress);
 
     // Blow candles at 30% progress
     if (progress > 0.3) blowCandles();
@@ -466,8 +520,9 @@ function initPage2() {
         knifeDrag.style.left = '50%';
         knifeGlow.style.height = '0px';
         setTimeout(() => { knifeDrag.style.transition = ''; }, 600);
-        // Fade out cut line
-        cutCtx.clearRect(0, 0, cutCanvas.width, cutCanvas.height);
+        
+        // Reset progress loop values
+        progressVal = 0;
         progressBar.style.width = '0%';
       }
     }
@@ -543,92 +598,7 @@ function initPage2() {
 
 
 /* ====================================================================
-   PAGE 3 — FALLING POLAROID PHOTOS
-   ==================================================================== */
-const PHOTO_CAPTIONS = [
-  'My favourite 💕', 'Pure joy ✨', 'Us 🌸',
-  'Always 💖', 'My world 🍅', 'Golden moments ⭐',
-  'Sunshine 🌻', 'Forever 💕', 'Bliss 🌙',
-  'My love 🎀', 'Perfect day 🌈', 'You & me 💞',
-];
-
-function initPage3() {
-  const stage = document.getElementById('polaroidStage');
-  stage.innerHTML = '';
-  const TOTAL = 12;
-  const stageW = stage.offsetWidth || window.innerWidth;
-
-  // Layout: arrange in staggered rows
-  const cols = window.innerWidth > 700 ? 4 : (window.innerWidth > 480 ? 3 : 2);
-  const itemW = Math.min(160, (stageW - 40) / cols - 20);
-  const rows = Math.ceil(TOTAL / cols);
-  const stageH = rows * (itemW + 70) + 80;
-  stage.style.minHeight = stageH + 'px';
-
-  for (let i = 0; i < TOTAL; i++) {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const baseX = col * ((stageW - 32) / cols) + (stageW / cols / 2) - itemW / 2 - 4;
-    const baseY = row * (itemW + 70) + 40;
-    const jitterX = (Math.random() - 0.5) * 30;
-    const jitterY = (Math.random() - 0.5) * 20;
-    const rot = (Math.random() - 0.5) * 14;
-    const rotStart = rot + (Math.random() - 0.5) * 40;
-    const delay = i * 0.12 + Math.random() * 0.1;
-
-    const card = document.createElement('div');
-    card.className = 'polaroid';
-    card.style.cssText = `
-      left: ${baseX + jitterX}px;
-      top: ${baseY + jitterY}px;
-      --p-size: ${itemW}px;
-      --p-rot: ${rot}deg;
-      --p-rot-start: ${rotStart}deg;
-      --p-y: 0px;
-      --fall-dur: ${0.8 + Math.random() * 0.4}s;
-      --fall-delay: ${delay}s;
-      width: ${itemW}px;
-    `;
-    card.innerHTML = `
-      <img src="photos/${i + 1}.jpg" alt="Memory ${i + 1}" 
-           onerror="this.parentNode.classList.add('no-photo'); this.remove();">
-      <div class="p-caption">${PHOTO_CAPTIONS[i]}</div>
-    `;
-    stage.appendChild(card);
-  }
-
-  // Add style for missing photos
-  if (!document.getElementById('nophotoStyle')) {
-    const style = document.createElement('style');
-    style.id = 'nophotoStyle';
-    style.textContent = `
-      .polaroid.no-photo {
-        background: linear-gradient(135deg, #FFB3C6, #FFDDE8);
-        display: flex; align-items: center; justify-content: center;
-        padding: 10px;
-      }
-      .polaroid.no-photo::before {
-        content: '📸';
-        font-size: 2.5rem;
-        opacity: 0.5;
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -60%);
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // Show "next" button after all photos have fallen
-  setTimeout(() => {
-    const btn = document.getElementById('photoDoneBtn');
-    btn.classList.remove('hidden');
-    btn.classList.add('show');
-  }, TOTAL * 130 + 1200);
-}
-
-/* ====================================================================
-   PAGE 4 — WHY I LOVE YOU (10 TOUCH CARDS)
+   PAGE 3 — WHY I LOVE YOU (10 TOUCH CARDS)
    ==================================================================== */
 const TOUCH_CARDS_DATA = [
   { icon: '🌸', text: 'Do I need a reason to love you? But to see, open the cards.' },
@@ -645,7 +615,7 @@ const TOUCH_CARDS_DATA = [
 
 let loveCardsInitialized = false;
 
-function initPage4() {
+function initPage3() {
   if (loveCardsInitialized) return;
   loveCardsInitialized = true;
 
@@ -707,9 +677,9 @@ function initPage4() {
 }
 
 /* ====================================================================
-   PAGE 5 — FINAL MESSAGE
+   PAGE 4 — FINAL MESSAGE
    ==================================================================== */
-function initPage5() {
+function initPage4() {
   const starsEl = document.getElementById('finalStars');
   if (starsEl && !starsEl.dataset.built) {
     starsEl.dataset.built = '1';
