@@ -610,7 +610,7 @@ const TOUCH_CARDS_DATA = [
   { icon: '💕', text: 'You are cute when you are angry 🤗🥰' },
   { icon: '🫂', text: 'Every time I saw you, you make me happy yk' },
   { icon: '🧸', text: 'You are beautiful. Of course you are sexy too' },
-  { icon: '⭐', text: 'i like everything about you baby of u are my favourite'}
+  { icon: '⭐', text: 'i love everything about u baby , u are my favroite' }
 ];
 
 let loveCardsInitialized = false;
