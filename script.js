@@ -637,16 +637,16 @@ function initPage3() {
    PAGE 4 — WHY I LOVE YOU (10 TOUCH CARDS)
    ==================================================================== */
 const TOUCH_CARDS_DATA = [
-  { icon: '🌸', text: '' },
-  { icon: '💖', text: '' },
-  { icon: '🍅', text: '' },
-  { icon: '🤝', text: '' },
-  { icon: '🤗', text: '' },
-  { icon: '✨', text: '' },
-  { icon: '💕', text: '' },
-  { icon: '🫂', text: '' },
-  { icon: '🧸', text: '' },
-  { icon: '⭐', text: '' }
+  { icon: '🌸', text: 'Do I need a reason to love you? But to see, open the cards.' },
+  { icon: '💖', text: 'I like your smile, your dimple, your invisible nose 😭' },
+  { icon: '🍅', text: 'You are weird 🫣' },
+  { icon: '🤝', text: 'You are funny 🤭' },
+  { icon: '🤗', text: 'I like your chubby cheeks tho 🤭' },
+  { icon: '✨', text: 'Your beautiful eyes that are killing me everyday, I like that' },
+  { icon: '💕', text: 'You are cute when you are angry 🤗🥰' },
+  { icon: '🫂', text: 'Every time I saw you, you make me happy yk' },
+  { icon: '🧸', text: 'You are beautiful. Of course you are sexy too' },
+  { icon: '⭐', text: 'I like everything about you baby' }
 ];
 
 let loveCardsInitialized = false;
