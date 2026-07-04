@@ -1771,9 +1771,9 @@ body {
 }
 
 /* ============================================================
-   PAGE 4 — LOVE FLIP CARDS
+   PAGE 3 — LOVE FLIP CARDS
    ============================================================ */
-#page4 {
+#page3 {
   background: radial-gradient(ellipse at 50% 30%,
       #FFF0F5 0%, #FFE4EF 40%, #FFF8F0 100%);
   overflow-y: auto;
