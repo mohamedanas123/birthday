@@ -654,7 +654,8 @@ function initPage4() {
 
   TOUCH_CARDS_DATA.forEach((data, index) => {
     const card = document.createElement('div');
-    card.className = 'lcard';
+    // Initially, lock all cards except the first one (index 0)
+    card.className = 'lcard' + (index > 0 ? ' locked' : '');
     card.innerHTML = `
       <div class="lcard-inner">
         <div class="lcard-front">
@@ -670,7 +671,35 @@ function initPage4() {
     `;
 
     card.addEventListener('click', () => {
-      card.classList.toggle('flipped');
+      // If it is locked, trigger the shake animation
+      if (card.classList.contains('locked')) {
+        card.classList.add('shake-error');
+        setTimeout(() => card.classList.remove('shake-error'), 400);
+        return;
+      }
+
+      if (card.classList.contains('flipped')) {
+        // We are closing the card. Let's flip it back.
+        card.classList.remove('flipped');
+        
+        // When we close this card, all subsequent cards must be locked and flipped back (if they were open)
+        for (let k = index + 1; k < TOUCH_CARDS_DATA.length; k++) {
+          const nextCard = grid.children[k];
+          if (nextCard) {
+            nextCard.classList.remove('flipped');
+            nextCard.classList.add('locked');
+          }
+        }
+      } else {
+        // We are opening/flipping this card!
+        card.classList.add('flipped');
+        
+        // Unlock the very next card
+        const nextCard = grid.children[index + 1];
+        if (nextCard) {
+          nextCard.classList.remove('locked');
+        }
+      }
     });
 
     grid.appendChild(card);

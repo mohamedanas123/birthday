@@ -116,20 +116,19 @@ html, body {
 }
 
 .load-name {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(4rem, 12vw, 8rem);
-  background: linear-gradient(135deg, #FF6B9D, #F5C842 50%, #FF9DC8 100%);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 30px rgba(255,107,157,0.8));
-  line-height: 1;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 900;
+  color: var(--pink);
+  filter: drop-shadow(0 0 15px rgba(255,107,157,0.45));
+  line-height: 1.1;
   opacity: 0;
   animation: nameGlowIn 1.2s var(--spring) 1s forwards;
 }
 @keyframes nameGlowIn {
-  0%   { opacity: 0; transform: scale(0.5) translateY(30px); filter: blur(20px) drop-shadow(0 0 0 transparent); }
+  0%   { opacity: 0; transform: scale(0.5) translateY(30px); filter: blur(20px); }
   60%  { opacity: 1; transform: scale(1.08); }
-  100% { opacity: 1; transform: scale(1) translateY(0); filter: drop-shadow(0 0 30px rgba(255,107,157,0.8)); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 /* Loading progress bar */
@@ -319,20 +318,19 @@ html, body {
 }
 
 .wish-name {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(4rem, 13vw, 9rem);
-  background: linear-gradient(135deg, #FF6B9D 0%, #F5C842 50%, #FF9DC8 100%);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 30px rgba(255,107,157,0.7));
-  line-height: 1;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  font-weight: 900;
+  color: var(--pink);
+  filter: drop-shadow(0 0 20px rgba(255,107,157,0.55));
+  line-height: 1.1;
   opacity: 0;
   animation: nameExplosion 0.9s var(--spring) 2.1s forwards;
 }
 @keyframes nameExplosion {
-  0%   { opacity: 0; transform: scale(0.3) rotate(-10deg); filter: blur(12px) drop-shadow(0 0 0px transparent); }
+  0%   { opacity: 0; transform: scale(0.3) rotate(-10deg); filter: blur(12px); }
   60%  { opacity: 1; transform: scale(1.15) rotate(2deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 30px rgba(255,107,157,0.7)); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 .wish-heart {
@@ -1019,12 +1017,11 @@ html, body {
   animation: popIn 0.8s var(--spring) 0.3s forwards;
 }
 .final-name-glow {
-  font-family: 'Great Vibes', cursive;
-  font-size: 1.4em;
-  background: linear-gradient(135deg, #FF6B9D, #F5C842, #FF9DC8);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 20px rgba(255,107,157,0.8));
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.25em;
+  font-weight: 900;
+  color: var(--pink);
+  filter: drop-shadow(0 0 15px rgba(255,107,157,0.55));
 }
 
 .final-letter {
@@ -1106,24 +1103,29 @@ html, body {
   margin-bottom: 0.5rem;
 }
 
-/* Grid: 2 columns on mobile, 5 across bigger screens */
+/* Grid: 1 column on mobile, 2 on tablet, 3 on desktop for larger size */
 .love-cards-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   width: 100%;
-  max-width: 700px;
+  max-width: 800px;
+  padding: 0 1rem;
 }
-@media (min-width: 540px) {
-  .love-cards-grid { grid-template-columns: repeat(5, 1fr); }
+@media (min-width: 480px) {
+  .love-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 768px) {
+  .love-cards-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ── Single flip card ── */
 .lcard {
   aspect-ratio: 3/4;
-  perspective: 700px;
+  perspective: 900px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: all 0.3s;
 }
 
 .lcard-inner {
@@ -1131,24 +1133,37 @@ html, body {
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.34, 1.3, 0.64, 1);
-  border-radius: 16px;
+  border-radius: 20px;
 }
 
 .lcard.flipped .lcard-inner {
   transform: rotateY(180deg);
 }
 
+/* ── Locked state ── */
+.lcard.locked {
+  opacity: 0.55;
+  filter: grayscale(80%) brightness(0.85);
+  cursor: not-allowed;
+}
+.lcard.locked:hover {
+  transform: none !important;
+}
+.lcard.locked .lcard-inner {
+  transform: none !important;
+}
+
 /* Front face */
 .lcard-front {
   position: absolute; inset: 0;
   backface-visibility: hidden;
-  border-radius: 16px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  box-shadow: 0 6px 24px rgba(200,72,106,0.2);
+  gap: 0.8rem;
+  box-shadow: 0 8px 30px rgba(200,72,106,0.22);
   overflow: hidden;
   background: var(--lc-bg, linear-gradient(135deg, #FFB3C6, #FF85A1));
 }
@@ -1162,15 +1177,16 @@ html, body {
 }
 
 .lcard-num {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 900;
   color: rgba(255,255,255,0.95);
-  text-shadow: 0 2px 8px rgba(180,60,90,0.3);
+  text-shadow: 0 3px 12px rgba(180,60,90,0.35);
   line-height: 1;
 }
 
 .lcard-heart {
-  font-size: 1.4rem;
+  font-size: 2.2rem;
   animation: heartBeat 1.2s ease-in-out infinite;
 }
 @keyframes heartBeat {
@@ -1181,10 +1197,10 @@ html, body {
 }
 
 .lcard-hint {
-  font-size: 0.65rem;
+  font-size: 0.85rem;
   font-weight: 800;
-  color: rgba(255,255,255,0.75);
-  letter-spacing: 1px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
@@ -1193,29 +1209,29 @@ html, body {
   position: absolute; inset: 0;
   backface-visibility: hidden;
   transform: rotateY(180deg);
-  border-radius: 16px;
-  background: rgba(255,255,255,0.92);
-  border: 2px solid rgba(255,179,200,0.5);
-  box-shadow: 0 6px 24px rgba(200,72,106,0.18);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.94);
+  border: 2.5px solid rgba(255,179,200,0.65);
+  box-shadow: 0 8px 30px rgba(200,72,106,0.18);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 0.6rem;
-  gap: 0.4rem;
+  padding: 1.2rem 1rem;
+  gap: 0.8rem;
   backdrop-filter: blur(8px);
   text-align: center;
 }
 
 .lcard-back-icon {
-  font-size: 1.4rem;
+  font-size: 2.4rem;
 }
 
 .lcard-back-text {
-  font-size: clamp(0.65rem, 2vw, 0.82rem);
-  font-weight: 700;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 800;
   color: var(--ink-mid);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* Per-card color variants (cycling) */
@@ -1230,10 +1246,24 @@ html, body {
 .lcard:nth-child(9)  .lcard-front { background: linear-gradient(135deg, #80D8C8, #40B8A8); }
 .lcard:nth-child(10) .lcard-front { background: linear-gradient(135deg, #FFB3C6, #F5C842); }
 
-/* Hover lift when not flipped */
-.lcard:not(.flipped):hover .lcard-inner {
-  transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 12px 32px rgba(200,72,106,0.25);
+/* Hover lift when not flipped or locked */
+.lcard:not(.flipped):not(.locked):hover {
+  transform: translateY(-8px) scale(1.03);
+}
+.lcard:not(.flipped):not(.locked):hover .lcard-inner {
+  box-shadow: 0 15px 40px rgba(200,72,106,0.3);
 }
 
-.love-next-btn { margin-top: 1rem; }
+.love-next-btn { margin-top: 1.5rem; }
+
+/* ── Shake error animation for out-of-order clicks ── */
+.shake-error {
+  animation: cardShake 0.4s ease;
+}
+@keyframes cardShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px) rotate(-1.5deg); }
+  40%, 80% { transform: translateX(8px) rotate(1.5deg); }
+}
+
+
