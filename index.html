@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Tomato! 🌸</title>
+  <meta name="description" content="A magical birthday surprise for Tomato 🍅💕"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;600;700;800;900&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ================================================
+       CINEMATIC LOADING SCREEN
+       ================================================ -->
+  <div id="loadScreen" class="load-screen">
+    <div class="load-bg-anim"></div>
+    <div class="load-content">
+      <div class="load-petals" id="loadPetals"></div>
+      <p class="load-tagline" id="loadTagline"></p>
+      <h1 class="load-title" id="loadTitle">Happy Birthday</h1>
+      <p class="load-name" id="loadName">Tomato 🍅</p>
+      <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
+      <button class="load-start-btn" id="loadStartBtn" onclick="startExperience()">
+        <span class="btn-icon">🌸</span>
+        <span>Open Your Surprise</span>
+        <span class="btn-icon">🌸</span>
+      </button>
+      <p class="load-hint" id="loadHint">Made with 💕 just for you</p>
+    </div>
+  </div>
+
+  <!-- Heart cursor trail canvas -->
+  <canvas id="cursorCanvas"></canvas>
+
+  <!-- Background sakura canvas (always visible) -->
+  <canvas id="sakuraCanvas"></canvas>
+  <!-- Fireworks / confetti canvas -->
+  <canvas id="fxCanvas"></canvas>
+
+  <!-- ================================================
+       PAGE 1 — SURPRISE REVEAL
+       ================================================ -->
+  <div class="page" id="page1">
+    <!-- Dark overlay that lifts -->
+    <div class="dark-overlay" id="darkOverlay"></div>
+
+    <div class="surprise-content" id="surpriseContent">
+      <!-- Stars burst -->
+      <div class="burst-stars" id="burstStars"></div>
+
+      <!-- Main wish text -->
+      <div class="wish-wrap">
+        <p class="wish-line1" id="wishLine1"></p>
+        <h1 class="wish-name" id="wishName"></h1>
+        <p class="wish-heart" id="wishHeart">💕</p>
+      </div>
+
+      <!-- Emoji rain row -->
+      <div class="emoji-rain-row" id="emojiRow">
+        <span>🎈</span><span>🌸</span><span>🎉</span>
+        <span>🍅</span><span>💕</span><span>🎂</span>
+        <span>✨</span><span>🎀</span><span>🌸</span>
+      </div>
+
+      <button class="next-btn" id="toPage2Btn" onclick="goToPage(2)">
+        🎂 Cut the Cake!
+      </button>
+    </div>
+  </div>
+
+  <!-- ================================================
+       PAGE 2 — CAKE CUTTING (DRAG KNIFE)
+       ================================================ -->
+  <div class="page hidden" id="page2">
+    <div class="cake-scene" id="cakeScene">
+      <h2 class="cake-title">Grab the knife &amp; cut the cake! 🔪</h2>
+      <p class="cake-sub-hint" id="cakeSubHint">Hold &amp; drag the knife down through the cake</p>
+
+      <!-- The whole interactive cake area -->
+      <div class="cake-stage" id="cakeStage">
+
+        <!-- Success message — shown above candles after cut -->
+        <div class="cut-top-message hidden" id="cutTopMessage">🎊 Amazing! You cut the cake!</div>
+
+        <!-- Canvas for the cut line -->
+        <canvas class="cut-canvas" id="cutCanvas"></canvas>
+
+        <!-- Candles row -->
+        <div class="candles" id="candles">
+          <div class="candle-wrap"><div class="c-flame" id="cf1"><div class="c-fi"></div></div><div class="c-stick"></div></div>
+          <div class="candle-wrap"><div class="c-flame" id="cf2"><div class="c-fi"></div></div><div class="c-stick"></div></div>
+          <div class="candle-wrap"><div class="c-flame" id="cf3"><div class="c-fi"></div></div><div class="c-stick"></div></div>
+          <div class="candle-wrap"><div class="c-flame" id="cf4"><div class="c-fi"></div></div><div class="c-stick"></div></div>
+          <div class="candle-wrap"><div class="c-flame" id="cf5"><div class="c-fi"></div></div><div class="c-stick"></div></div>
+        </div>
+
+        <!-- Whole Cake -->
+        <div class="cake-whole" id="cakeWhole">
+          <div class="cake-layer c-top">🌸 Happy Birthday 🌸</div>
+          <div class="cake-layer c-mid"></div>
+          <div class="cake-layer c-bot"></div>
+          <div class="cake-plate"></div>
+        </div>
+
+        <!-- Draggable Knife -->
+        <div class="knife-drag" id="knifeDrag">
+          <div class="knife-emoji" id="knifeEmoji">🔪</div>
+          <div class="knife-glow"></div>
+        </div>
+
+        <!-- Cut cake halves (shown after cut) -->
+        <div class="cake-cut-wrap hidden" id="cakeCutWrap">
+          <div class="cake-half left-half">
+            <div class="c-top-h">🌸</div>
+            <div class="c-mid-h"></div>
+            <div class="c-bot-h"></div>
+            <div class="cream-expose"></div>
+          </div>
+          <div class="cake-half right-half">
+            <div class="c-top-h">🌸</div>
+            <div class="c-mid-h"></div>
+            <div class="c-bot-h"></div>
+            <div class="cream-expose"></div>
+          </div>
+        </div>
+
+        <!-- Cream & confetti splats -->
+        <div class="cream-splats hidden" id="creamSplats">
+          <span class="splat s1">🍦</span>
+          <span class="splat s2">🎂</span>
+          <span class="splat s3">⭐</span>
+          <span class="splat s4">🌸</span>
+          <span class="splat s5">💕</span>
+          <span class="splat s6">🎉</span>
+          <span class="splat s7">🍦</span>
+          <span class="splat s8">✨</span>
+        </div>
+      </div><!-- /.cake-stage -->
+
+      <!-- Progress indicator -->
+      <div class="cut-progress-wrap" id="cutProgressWrap">
+        <div class="cut-progress-bar" id="cutProgressBar"></div>
+      </div>
+
+      <div class="cut-message hidden" id="cutMessage">
+        <button class="next-btn" onclick="goToPage(3)">📸 See Our Photos!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       PAGE 3 — FALLING POLAROID PHOTOS
+       ================================================ -->
+  <div class="page hidden" id="page3">
+    <div class="photos-scene" id="photosScene">
+      <h2 class="photos-title">Our Beautiful Memories 📸</h2>
+      <p class="photos-sub">These are the moments I treasure most 💕</p>
+
+      <!-- Photos fall into this container -->
+      <div class="polaroid-stage" id="polaroidStage"></div>
+
+      <button class="next-btn photo-done-btn hidden" id="photoDoneBtn" onclick="goToPage(4)">
+        💌 One More Surprise...
+      </button>
+    </div>
+  </div>
+
+  <!-- ================================================
+       PAGE 4 — FINAL LOVE MESSAGE
+       ================================================ -->
+  <div class="page hidden" id="page4">
+    <div class="final-scene" id="finalScene">
+      <div class="final-stars" id="finalStars"></div>
+      <h2 class="final-title">Happy Birthday,<br><span class="final-name-glow">Tomato 🍅</span></h2>
+      <div class="final-letter">
+        <p>Every day with you is a gift.</p>
+        <p>Every laugh is my favourite sound.</p>
+        <p>Every moment by your side is home.</p>
+        <br>
+        <p>You are my best friend, my biggest joy,</p>
+        <p>and the most beautiful part of my life.</p>
+        <br>
+        <p class="final-sign">With all my love — always. 💕</p>
+      </div>
+      <button class="finale-fireworks-btn" onclick="grandFinale()">
+        🎆 Launch Birthday Fireworks!
+      </button>
+    </div>
+  </div>
+
+  <!-- Page dot navigator -->
+  <div class="page-dots" id="pageDots">
+    <span class="dot active" id="dot1" onclick="goToPage(1)" title="Surprise"></span>
+    <span class="dot" id="dot2" onclick="goToPage(2)" title="Cake"></span>
+    <span class="dot" id="dot3" onclick="goToPage(3)" title="Photos"></span>
+    <span class="dot" id="dot4" onclick="goToPage(4)" title="Message"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
